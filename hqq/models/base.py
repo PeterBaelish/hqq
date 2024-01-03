@@ -57,8 +57,8 @@ class BasePatch():
 	#Main patching function
 	@classmethod
 	def patch_model(cls, model, patch_nonlinear_fct, patch_linear_fct, patch_params, verbose=True):
-		model.eval()
-		cls.freeze_model(model)
+		# model.eval()
+		# cls.freeze_model(model)
 		cls.patch_nonlinearlayers(model, patch_nonlinear_fct, verbose=verbose)
 		cls.patch_linearlayers(model, patch_linear_fct, patch_params, verbose=verbose)
 		cls.autoname_modules(model)
