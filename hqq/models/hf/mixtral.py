@@ -17,38 +17,38 @@ class MixtralPatch(BasePatch):
 
 	@classmethod
 	def patch_nonlinearlayers(cls, model, patch_fct, verbose=True):
-		base_model              = model.model
-		model.lm_head           = patch_fct(model.lm_head) ###
-		base_model.embed_tokens = patch_fct(base_model.embed_tokens)
-		base_model.norm         = patch_fct(base_model.norm)
+		base_model                = model.model
+		base_model.output         = patch_fct(base_model.output) ###
+		base_model.tok_embeddings = patch_fct(base_model.tok_embeddings)
+		base_model.norm           = patch_fct(base_model.norm)
+		base_model.freqs_cis      = patch_fct(base_model.freqs_cis)
 
 		layers = base_model.layers
 		for i in tqdm(range(len(base_model.layers)), disable=not verbose):
-			layers[i].self_attn.rotary_emb     = patch_fct(layers[i].self_attn.rotary_emb)
-			layers[i].input_layernorm          = patch_fct(layers[i].input_layernorm)
-			layers[i].post_attention_layernorm = patch_fct(layers[i].post_attention_layernorm)
+			#layers[i].attention.rotary_emb    = patch_fct(layers[i].attention.rotary_emb)
+			layers[i].attention_norm          = patch_fct(layers[i].attention_norm)
+			layers[i].ffn_norm                = patch_fct(layers[i].ffn_norm)
+			layers[i].feed_forward.gate       = patch_fct(layers[i].feed_forward.gate) #Keep MOE gate as fp16 because it's small
 
-			layers[i].block_sparse_moe.gate    = patch_fct(layers[i].block_sparse_moe.gate) #Keep MOE gate as fp16 because it's small
-
-			n_experts = len(layers[i].block_sparse_moe.experts)
-			for k in range(n_experts):
-				layers[i].block_sparse_moe.experts[k].act_fn  = patch_fct(layers[i].block_sparse_moe.experts[k].act_fn)
+			#n_experts = len(layers[i].feed_forward.experts)
+			#for k in range(n_experts):
+			#	layers[i].feed_forward.experts[k].act_fn  = patch_fct(layers[i].feed_forward.experts[k].act_fn)
 
 	@classmethod
 	def patch_linearlayers(cls, model, patch_fct, patch_params, verbose=True):
 		base_model = model.model
 		layers     = base_model.layers 
 		for i in tqdm(range(len(layers)), disable=not verbose):
-			layers[i].self_attn.q_proj = patch_fct(layers[i].self_attn.q_proj, patch_params['self_attn.q_proj'])
-			layers[i].self_attn.k_proj = patch_fct(layers[i].self_attn.k_proj, patch_params['self_attn.k_proj'])
-			layers[i].self_attn.v_proj = patch_fct(layers[i].self_attn.v_proj, patch_params['self_attn.v_proj'])
-			layers[i].self_attn.o_proj = patch_fct(layers[i].self_attn.o_proj, patch_params['self_attn.o_proj'])
+			layers[i].attention.wq = patch_fct(layers[i].attention.wq, patch_params['self_attn.q_proj'])
+			layers[i].attention.wk = patch_fct(layers[i].attention.wk, patch_params['self_attn.k_proj'])
+			layers[i].attention.wv = patch_fct(layers[i].attention.wv, patch_params['self_attn.v_proj'])
+			layers[i].attention.wo = patch_fct(layers[i].attention.wo, patch_params['self_attn.o_proj'])
 
-			n_experts = len(layers[i].block_sparse_moe.experts)
+			n_experts = len(layers[i].feed_forward.experts)
 			for k in range(n_experts):
-				layers[i].block_sparse_moe.experts[k].w1 = patch_fct(layers[i].block_sparse_moe.experts[k].w1, patch_params['block_sparse_moe.experts.w1'])
-				layers[i].block_sparse_moe.experts[k].w2 = patch_fct(layers[i].block_sparse_moe.experts[k].w2, patch_params['block_sparse_moe.experts.w2'])
-				layers[i].block_sparse_moe.experts[k].w3 = patch_fct(layers[i].block_sparse_moe.experts[k].w3, patch_params['block_sparse_moe.experts.w3'])
+				layers[i].feed_forward.experts[k].w1 = patch_fct(layers[i].feed_forward.experts[k].w1, patch_params['block_sparse_moe.experts.w1'])
+				layers[i].feed_forward.experts[k].w2 = patch_fct(layers[i].feed_forward.experts[k].w2, patch_params['block_sparse_moe.experts.w2'])
+				layers[i].feed_forward.experts[k].w3 = patch_fct(layers[i].feed_forward.experts[k].w3, patch_params['block_sparse_moe.experts.w3'])
 
 
 class MixtralHQQ(MixtralPatch, BaseHQQHFModel):
