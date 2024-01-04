@@ -140,7 +140,7 @@ class HQQLinear(torch.nn.Module):
 		self.quant_config = quant_config
 		self.set_backend(HQQLinear.backend) #Default backend
 		if(linear_layer is not None):
-			self.bias = None if (linear_layer.bias==None) else linear_layer.bias.half().cuda()
+			self.bias = None if (linear_layer.bias==None) else linear_layer.bias.half()
 			self.quantize(linear_layer.weight.data, **quant_config)
 		if(del_orig): del linear_layer
 		torch.cuda.empty_cache()
@@ -172,7 +172,7 @@ class HQQLinear(torch.nn.Module):
 		self.meta   = state_dict['meta']
 		self.bias   = state_dict['bias'] if ('bias' in state_dict) else None
 		self.in_gpu = self.W_q.device.type == 'cuda'
-		if(self.in_gpu==False): self.cuda()
+		# if(self.in_gpu==False): self.cuda()
 		self.ready  = True
 
 	def quantize(self, W, weight_quant_params, scale_quant_params, zero_quant_params):
@@ -189,7 +189,7 @@ class HQQLinear(torch.nn.Module):
 
 		self.W_q   = W_q
 		self.meta  = meta 
-		self.cuda()
+		# self.cuda()
 		self.ready = True
 
 	@torch.inference_mode()
