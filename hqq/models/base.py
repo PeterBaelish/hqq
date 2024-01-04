@@ -40,7 +40,7 @@ class BasePatch():
 	#Autmatically name modules. This is very important to save/load the weights 
 	@classmethod
 	def autoname_modules(cls, model):
-		for name, module in model.named_modules():
+		for name, module in model.model.named_modules():
 			module.name = name
 
 	#Freeze all layers
