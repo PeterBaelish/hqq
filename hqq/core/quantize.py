@@ -187,7 +187,7 @@ class HQQLinear(torch.nn.Module):
 		if(meta['quant_zero']):
 			meta['zero_q'], meta['meta_zero']    = Quantizer.quantize(meta['zero'],  **zero_quant_params);  del meta['zero']
 
-		print(W_q)
+		# print(W_q)
 		self.W_q   = W_q
 		self.meta  = meta 
 		# self.cuda()
