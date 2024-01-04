@@ -21,7 +21,6 @@ class MixtralPatch(BasePatch):
 		base_model.output         = patch_fct(base_model.output) ###
 		base_model.tok_embeddings = patch_fct(base_model.tok_embeddings)
 		base_model.norm           = patch_fct(base_model.norm)
-		base_model.freqs_cis      = patch_fct(base_model.freqs_cis)
 
 		layers = base_model.layers
 		for i in tqdm(range(len(base_model.layers)), disable=not verbose):
