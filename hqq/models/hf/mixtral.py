@@ -28,7 +28,7 @@ class MixtralPatch(BasePatch):
 			layers[i].attention_norm          = patch_fct(layers[i].attention_norm)
 			layers[i].ffn_norm                = patch_fct(layers[i].ffn_norm)
 			layers[i].feed_forward.gate       = patch_fct(layers[i].feed_forward.gate) #Keep MOE gate as fp16 because it's small
-
+			'''
 			layers[i].feed_forward.expert_gpu_w1 = patch_fct(layers[i].feed_forward.expert_gpu_w1)
 			layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2)
 			layers[i].feed_forward.expert_gpu_w3 = patch_fct(layers[i].feed_forward.expert_gpu_w3)
@@ -38,6 +38,7 @@ class MixtralPatch(BasePatch):
 				layers[i].feed_forward.experts[k].w1 = patch_fct(layers[i].feed_forward.experts[k].w1)
 				layers[i].feed_forward.experts[k].w2 = patch_fct(layers[i].feed_forward.experts[k].w2)
 				layers[i].feed_forward.experts[k].w3 = patch_fct(layers[i].feed_forward.experts[k].w3)
+			'''
 
 	@classmethod
 	def patch_linearlayers(cls, model, patch_fct, patch_params, verbose=True):
@@ -48,7 +49,7 @@ class MixtralPatch(BasePatch):
 			layers[i].attention.wk = patch_fct(layers[i].attention.wk, patch_params['self_attn.k_proj'])
 			layers[i].attention.wv = patch_fct(layers[i].attention.wv, patch_params['self_attn.v_proj'])
 			layers[i].attention.wo = patch_fct(layers[i].attention.wo, patch_params['self_attn.o_proj'])
-			'''
+			
 			layers[i].feed_forward.expert_gpu_w1 = patch_fct(layers[i].feed_forward.expert_gpu_w1, patch_params['block_sparse_moe.experts.w1'])
 			layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2, patch_params['block_sparse_moe.experts.w2'])
 			layers[i].feed_forward.expert_gpu_w3 = patch_fct(layers[i].feed_forward.expert_gpu_w3, patch_params['block_sparse_moe.experts.w3'])
@@ -58,7 +59,7 @@ class MixtralPatch(BasePatch):
 				layers[i].feed_forward.experts[k].w1 = patch_fct(layers[i].feed_forward.experts[k].w1, patch_params['block_sparse_moe.experts.w1'])
 				layers[i].feed_forward.experts[k].w2 = patch_fct(layers[i].feed_forward.experts[k].w2, patch_params['block_sparse_moe.experts.w2'])
 				layers[i].feed_forward.experts[k].w3 = patch_fct(layers[i].feed_forward.experts[k].w3, patch_params['block_sparse_moe.experts.w3'])
-			'''
+			''''''
 
 class MixtralHQQ(MixtralPatch, BaseHQQHFModel):
 	#layers to ignore when saving the weights
