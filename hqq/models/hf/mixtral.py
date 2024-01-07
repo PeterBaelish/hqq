@@ -50,7 +50,7 @@ class MixtralPatch(BasePatch):
 		base_model = model.model
 		layers     = base_model.layers 
 		
-		for i in tqdm(range(int(len(layers)/8)), disable=not verbose):
+		for i in tqdm(range(int(len(layers)/2)), disable=not verbose):
 			
 			layers[i].attention.wq = patch_fct(layers[i].attention.wq, patch_params['self_attn.q_proj'])
 			layers[i].attention.wk = patch_fct(layers[i].attention.wk, patch_params['self_attn.k_proj'])
