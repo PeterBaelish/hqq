@@ -49,19 +49,14 @@ class MixtralPatch(BasePatch):
 	def patch_linearlayers(cls, model, patch_fct, patch_params, verbose=True):
 		base_model = model.model
 		layers     = base_model.layers 
-
-		layers[0].attention.wq = patch_fct(layers[0].attention.wq, patch_params['self_attn.q_proj'])
-		layers[0].attention.wk = patch_fct(layers[0].attention.wk, patch_params['self_attn.k_proj'])
-		layers[0].attention.wv = patch_fct(layers[0].attention.wv, patch_params['self_attn.v_proj'])
-		layers[0].attention.wo = patch_fct(layers[0].attention.wo, patch_params['self_attn.o_proj'])
-		'''
-		for i in tqdm(range(len(layers)), disable=not verbose):
+		
+		for i in tqdm(range(len(layers)/8), disable=not verbose):
 			
-			layers[0].attention.wq = patch_fct(layers[0].attention.wq, patch_params['self_attn.q_proj'])
-			layers[0].attention.wk = patch_fct(layers[0].attention.wk, patch_params['self_attn.k_proj'])
-			layers[0].attention.wv = patch_fct(layers[0].attention.wv, patch_params['self_attn.v_proj'])
-			layers[0].attention.wo = patch_fct(layers[0].attention.wo, patch_params['self_attn.o_proj'])
-		'''
+			layers[i].attention.wq = patch_fct(layers[i].attention.wq, patch_params['self_attn.q_proj'])
+			layers[i].attention.wk = patch_fct(layers[i].attention.wk, patch_params['self_attn.k_proj'])
+			layers[i].attention.wv = patch_fct(layers[i].attention.wv, patch_params['self_attn.v_proj'])
+			layers[i].attention.wo = patch_fct(layers[i].attention.wo, patch_params['self_attn.o_proj'])
+		''''''
 		'''	
 			layers[i].feed_forward.expert_gpu_w1 = patch_fct(layers[i].feed_forward.expert_gpu_w1, patch_params['block_sparse_moe.experts.w1'])
 			layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2, patch_params['block_sparse_moe.experts.w2'])
