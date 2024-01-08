@@ -42,7 +42,7 @@ class MixtralPatch(BasePatch):
 			layers[i].attention.wo = patch_fct(layers[i].attention.wo, patch_params['self_attn.o_proj'])
 			''''''
 		
-		for i in tqdm(range(int(len(layers)/32)), disable=not verbose):
+		for i in tqdm(range(int(len(layers)/8)), disable=not verbose):
 			layers[i].feed_forward.expert_gpu_w1 = patch_fct(layers[i].feed_forward.expert_gpu_w1, patch_params['block_sparse_moe.experts.w1'])
 			layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2, patch_params['block_sparse_moe.experts.w2'])
 			layers[i].feed_forward.expert_gpu_w3 = patch_fct(layers[i].feed_forward.expert_gpu_w3, patch_params['block_sparse_moe.experts.w3'])
