@@ -43,14 +43,14 @@ class MixtralPatch(BasePatch):
 			''''''
 			
 			layers[i].feed_forward.expert_gpu_w1 = patch_fct(layers[i].feed_forward.expert_gpu_w1, patch_params['block_sparse_moe.experts.w1'])
-			layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2, patch_params['block_sparse_moe.experts.w2'])
-			layers[i].feed_forward.expert_gpu_w3 = patch_fct(layers[i].feed_forward.expert_gpu_w3, patch_params['block_sparse_moe.experts.w3'])
+			# layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2, patch_params['block_sparse_moe.experts.w2'])
+			# layers[i].feed_forward.expert_gpu_w3 = patch_fct(layers[i].feed_forward.expert_gpu_w3, patch_params['block_sparse_moe.experts.w3'])
 			
 			n_experts = len(layers[i].feed_forward.experts)
 			for k in range(n_experts):
 				layers[i].feed_forward.experts[k].w1 = patch_fct(layers[i].feed_forward.experts[k].w1, patch_params['block_sparse_moe.experts.w1'])
-				layers[i].feed_forward.experts[k].w2 = patch_fct(layers[i].feed_forward.experts[k].w2, patch_params['block_sparse_moe.experts.w2'])
-				layers[i].feed_forward.experts[k].w3 = patch_fct(layers[i].feed_forward.experts[k].w3, patch_params['block_sparse_moe.experts.w3'])
+				# layers[i].feed_forward.experts[k].w2 = patch_fct(layers[i].feed_forward.experts[k].w2, patch_params['block_sparse_moe.experts.w2'])
+				# layers[i].feed_forward.experts[k].w3 = patch_fct(layers[i].feed_forward.experts[k].w3, patch_params['block_sparse_moe.experts.w3'])
 			''''''
 
 class MixtralHQQ(MixtralPatch, BaseHQQHFModel):
