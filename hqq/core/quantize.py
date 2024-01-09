@@ -227,7 +227,7 @@ class HQQLinear(torch.nn.Module):
 	@torch.compile()
 	def forward_pytorch_compile(self, x):
 		W_est = self.dequantize()
-		out   = torch.matmul(x, W_est.t())
+		out   = torch.matmul(x, W_est.t().float())
 		if(self.bias!=None): out += self.bias
 		del W_est
 		return out
