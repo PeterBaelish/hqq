@@ -104,6 +104,8 @@ class Quantizer:
 				meta_c[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
 			else:
 				meta_c[key] = meta[key]
+		del W_q
+		del meta
 		return W_q_c, meta_c
 
 	@classmethod
