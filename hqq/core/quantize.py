@@ -158,8 +158,18 @@ class HQQLinear(torch.nn.Module):
 
 		self.in_gpu = True
 
-	def to(self, device):
-		pass
+	def cpu(self):
+		if(~self.in_gpu): return 
+		self.W_q, self.meta = Quantizer.cpu(self.W_q, self.meta)
+		if(self.meta['quant_scale']):
+			self.meta['scale_q'] , self.meta['meta_scale'] = Quantizer.cpu(self.meta['scale_q'], self.meta['meta_scale'])
+		if(self.meta['quant_zero']):
+			self.meta['zero_q'] , self.meta['meta_zero']   = Quantizer.cpu(self.meta['zero_q'], self.meta['meta_zero'])
+
+		if(self.bias is not None):
+			self.bias = self.bias.half().cpu()
+
+		self.in_gpu = False
 
 	def half(self):
 		return self 
