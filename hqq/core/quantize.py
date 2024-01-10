@@ -89,23 +89,25 @@ class Quantizer:
 
 	@classmethod
 	def to_inplace(cls, W_q, meta, device):
-		W_q = W_q.to(device).contiguous() 
+		W_q_c = W_q.to(device).contiguous()
+		meta_c = {}
 		for key in meta:
 			if(type(meta[key])==torch.Tensor):
-				meta[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
+				meta_c[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
 		del W_q
 		del meta
-		return W_q, meta
+		return W_q_c, meta_c
 
 	@classmethod
 	def to_ooplace(cls, W_q, meta, device):
-		W_q  = W_q.to(device).contiguous() 
+		W_q_c  = W_q.to(device).contiguous() 
+		meta_c = {}
 		for key in meta:
 			if(type(meta[key])==torch.Tensor):
-				meta[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
+				meta_c[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
 		del W_q
 		del meta
-		return W_q, meta
+		return W_q_c, meta_c
 
 	@classmethod
 	def cuda(cls, W_q, meta, device_n=0):
