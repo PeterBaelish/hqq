@@ -94,6 +94,8 @@ class Quantizer:
 		for key in meta:
 			if(type(meta[key])==torch.Tensor):
 				meta_c[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
+			else:
+				meta_c[key] = meta[key]
 		del W_q
 		del meta
 		return W_q_c, meta_c
@@ -104,7 +106,9 @@ class Quantizer:
 		meta_c = {}
 		for key in meta:
 			if(type(meta[key])==torch.Tensor):
-				meta_c[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous() 
+				meta_c[key] = (meta[key].half() if meta[key].dtype==torch.float32 else meta[key]).to(device).contiguous()
+			else:
+				meta_c[key] = meta[key]
 		del W_q
 		del meta
 		return W_q_c, meta_c
