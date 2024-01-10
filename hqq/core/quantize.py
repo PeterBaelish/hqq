@@ -232,9 +232,11 @@ class HQQLinear(torch.nn.Module):
 	@torch.no_grad()
 	def forward_pytorch(self, x):
 		W_est = self.dequantize()
-		out   = torch.matmul(x, W_est.t().float())
+		W_est_float = W_est.t().float()
+		out   = torch.matmul(x, W_est_float)
 		if(self.bias!=None): out += self.bias
 		del W_est
+		del W_est_float
 		return out
 
 	##############################################
