@@ -106,6 +106,7 @@ class Quantizer:
 				meta_c[key] = meta[key]
 		del W_q
 		del meta
+		torch.cuda.empty_cache()
 		return W_q_c, meta_c
 
 	@classmethod
