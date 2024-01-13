@@ -41,11 +41,11 @@ class MixtralPatch(BasePatch):
 			layers[i].attention.wv = patch_fct(layers[i].attention.wv, patch_params['self_attn.v_proj'])
 			layers[i].attention.wo = patch_fct(layers[i].attention.wo, patch_params['self_attn.o_proj'])
 			''''''
-			layers[i].feed_forward.expert_gpu_w1 = patch_fct(layers[i].feed_forward.expert_gpu_w1, patch_params['block_sparse_moe.experts.w1'])
-			layers[i].feed_forward.expert_gpu_w2 = patch_fct(layers[i].feed_forward.expert_gpu_w2, patch_params['block_sparse_moe.experts.w2'])
-			layers[i].feed_forward.expert_gpu_w3 = patch_fct(layers[i].feed_forward.expert_gpu_w3, patch_params['block_sparse_moe.experts.w3'])
-			
-		# for i in tqdm(range(int(len(layers)/8)), disable=not verbose):
+			n_experts_gpu = len(layers[i].feed_forward.experts_gpu)
+			for k in range(n_experts_gpu):
+				layers[i].feed_forward.experts_gpu[k].w1 = patch_fct(layers[i].feed_forward.experts_gpu[k].w1, patch_params['block_sparse_moe.experts.w1'])
+				layers[i].feed_forward.experts_gpu[k].w2 = patch_fct(layers[i].feed_forward.experts_gpu[k].w2, patch_params['block_sparse_moe.experts.w2'])
+				layers[i].feed_forward.experts_gpu[k].w3 = patch_fct(layers[i].feed_forward.experts_gpu[k].w3, patch_params['block_sparse_moe.experts.w3'])
 			
 			n_experts = len(layers[i].feed_forward.experts)
 			for k in range(n_experts):
