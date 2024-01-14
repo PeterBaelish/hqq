@@ -155,8 +155,8 @@ class HQQLinear(torch.nn.Module):
 	def cuda(self, device_n=0):
 		if(self.in_gpu): return 
 		self.W_q, self.meta = Quantizer.cuda(self.W_q, self.meta, device_n)
-		print(self.W_q)
-		print(self.meta)
+		# print(self.W_q)
+		# print(self.meta)
 		if(self.meta['quant_scale']):
 			self.meta['scale_q'] , self.meta['meta_scale'] = Quantizer.cuda(self.meta['scale_q'], self.meta['meta_scale'], device_n)
 		if(self.meta['quant_zero']):
