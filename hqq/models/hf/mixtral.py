@@ -43,9 +43,12 @@ class MixtralPatch(BasePatch):
 			''''''
 			n_experts_gpu = len(layers[i].feed_forward.experts_gpu)
 			for k in range(n_experts_gpu):
-				layers[i].feed_forward.experts_gpu[k].w1 = patch_fct(layers[i].feed_forward.experts_gpu[k].w1, patch_params['block_sparse_moe.experts.w1']).cuda()
-				layers[i].feed_forward.experts_gpu[k].w2 = patch_fct(layers[i].feed_forward.experts_gpu[k].w2, patch_params['block_sparse_moe.experts.w2']).cuda()
-				layers[i].feed_forward.experts_gpu[k].w3 = patch_fct(layers[i].feed_forward.experts_gpu[k].w3, patch_params['block_sparse_moe.experts.w3']).cuda()
+				layers[i].feed_forward.experts_gpu[k].w1 = patch_fct(layers[i].feed_forward.experts_gpu[k].w1, patch_params['block_sparse_moe.experts.w1'])	
+				layers[i].feed_forward.experts_gpu[k].w2 = patch_fct(layers[i].feed_forward.experts_gpu[k].w2, patch_params['block_sparse_moe.experts.w2'])
+				layers[i].feed_forward.experts_gpu[k].w3 = patch_fct(layers[i].feed_forward.experts_gpu[k].w3, patch_params['block_sparse_moe.experts.w3'])
+				layers[i].feed_forward.experts_gpu[k].w1.cuda()
+				layers[i].feed_forward.experts_gpu[k].w2.cuda()
+				layers[i].feed_forward.experts_gpu[k].w3.cuda()
 			
 			n_experts = len(layers[i].feed_forward.experts)
 			for k in range(n_experts):
