@@ -40,7 +40,7 @@ class MixtralPatch(BasePatch):
 			layers[i].attention.wk = patch_fct(layers[i].attention.wk, patch_params['self_attn.k_proj'])
 			layers[i].attention.wv = patch_fct(layers[i].attention.wv, patch_params['self_attn.v_proj'])
 			layers[i].attention.wo = patch_fct(layers[i].attention.wo, patch_params['self_attn.o_proj'])
-			'''
+			''''''
 			n_experts_gpu = len(layers[i].feed_forward.experts_gpu)
 			for k in range(n_experts_gpu):
 				layers[i].feed_forward.experts_gpu[k].w1 = patch_fct(layers[i].feed_forward.experts_gpu[k].w1, patch_params['block_sparse_moe.experts.w1'])	
@@ -49,19 +49,19 @@ class MixtralPatch(BasePatch):
 				layers[i].feed_forward.experts_gpu[k].w1.cuda()
 				layers[i].feed_forward.experts_gpu[k].w2.cuda()
 				layers[i].feed_forward.experts_gpu[k].w3.cuda()
-			'''
+			
 			n_experts = len(layers[i].feed_forward.experts)
 			device = 0
 			for k in range(n_experts):
 				layers[i].feed_forward.experts[k].w1 = patch_fct(layers[i].feed_forward.experts[k].w1, patch_params['block_sparse_moe.experts.w1'])
 				layers[i].feed_forward.experts[k].w2 = patch_fct(layers[i].feed_forward.experts[k].w2, patch_params['block_sparse_moe.experts.w2'])
 				layers[i].feed_forward.experts[k].w3 = patch_fct(layers[i].feed_forward.experts[k].w3, patch_params['block_sparse_moe.experts.w3'])
-				
+				'''
 				layers[i].feed_forward.experts[k].w1.cuda(device)
 				layers[i].feed_forward.experts[k].w2.cuda(device)
 				layers[i].feed_forward.experts[k].w3.cuda(device)
 				device = (device + 1) % 4
-				''''''
+				'''
 
 class MixtralHQQ(MixtralPatch, BaseHQQHFModel):
 	#layers to ignore when saving the weights
